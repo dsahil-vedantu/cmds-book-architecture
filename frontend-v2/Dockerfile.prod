@@ -1,0 +1,32 @@
+# ── Build stage ────────────────────────────────────────────────
+FROM node:20-alpine AS build
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+# Vite inlines these at build time — they must be passed as Railway
+# build-args (set via `railway variables set VITE_...=...`).
+ARG VITE_API_BASE
+ARG VITE_GOOGLE_CLIENT_ID
+ARG VITE_ALLOWED_DOMAIN
+ENV VITE_API_BASE=${VITE_API_BASE}
+ENV VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}
+ENV VITE_ALLOWED_DOMAIN=${VITE_ALLOWED_DOMAIN}
+
+COPY . .
+RUN npm run build
+
+# ── Runtime stage (tiny static SPA server) ─────────────────────
+FROM node:20-alpine
+
+WORKDIR /app
+
+RUN npm install -g serve@14
+
+COPY --from=build /app/dist ./dist
+
+# Railway injects $PORT. `-s` serves SPA with history-API fallback
+# (rewrites all unknown routes to /index.html so client-side routing works).
+CMD ["sh", "-c", "serve -s dist -l ${PORT:-5173}"]

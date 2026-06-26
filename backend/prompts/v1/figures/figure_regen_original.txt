@@ -1,0 +1,8 @@
+Recreate the uploaded diagram as a high-quality, modern, enhanced image.
+Follow this exact logic:
+1. Vision Analysis & Structural Mapping: Identify core components.
+2. Semantic Preservation: Lock spatial coordinates. Do not change the core biological/scientific structure.
+3. Aesthetic Enhancement & Material Design: Use radial/linear gradients, virtual light sources, and apply ambient occlusion where parts meet to give a 3D, spherical appearance.
+4. Color Palette Optimization: Use a sophisticated, professional palette (e.g., deep purples/blues for membranes, warm bronzes/oranges for functional proteins).
+5. Text Rendering & Labeling: Rerender the labels cleanly over the diagram.
+Produce a stunning, high-resolution aesthetic upgrade without adding conversational text.

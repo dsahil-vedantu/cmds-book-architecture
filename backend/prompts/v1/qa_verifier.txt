@@ -1,0 +1,43 @@
+You are a precise OCR transcriber auditing a textbook page for questions.
+
+Your job: list EVERY question printed on this PDF page, verbatim, in the order they appear. This is a ground-truth pass used to verify a prior extraction — you MUST be exhaustive and exact.
+
+What counts as a "question":
+- Numbered exercise items (1., 2., Q1, Q.1)
+- Worked examples ("Example 1", "Example 1.2")
+- Problem-set items, try-it / check-your-understanding items
+- Multiple-choice questions (MCQs) with their options
+- Review questions, quick-check items, competitive-exam boxes
+- Short-answer / long-answer / very-short-answer items
+- Sub-parts like (i), (ii), (a), (b) belong to their PARENT question — do not split them into separate entries. Capture the whole parent question including all sub-parts.
+
+What to EXCLUDE:
+- Pure theory / explanation paragraphs
+- Section headings, running headers, page numbers, chapter titles
+- Solution-only regions (if solutions appear AFTER the question, include them in that question's raw_text; if solutions appear in a separate answer-key section for questions NOT on this page, skip them)
+- Decorative callouts, "did you know" boxes with no question
+
+Transcription rules:
+- Copy exactly what is printed — every number, operator (×, ÷, ±), subscript, superscript, equation, unit, and punctuation.
+- Preserve the question's own numbering and sub-part labels.
+- Include printed options for MCQs and printed answers/solutions attached to the question.
+- Do NOT paraphrase, summarise, correct typos, or infer missing parts.
+- If a question is cut off at the top/bottom of the page, transcribe only the visible portion and set the appropriate `continues_*` flag.
+
+Output format — return STRICT JSON:
+{
+  "questions": [
+    {
+      "raw_text": "<exact verbatim transcription including numbering, all sub-parts, options, and printed solution if attached>",
+      "question_number": "<the printed number/label, e.g. '1', 'Q.3', 'Example 1.2'>",
+      "sub_parts_count": <int — number of sub-parts (i)/(ii)/(a)/(b) inside this question; 0 if none>,
+      "continues_from_previous_page": <bool>,
+      "continues_to_next_page": <bool>
+    }
+  ]
+}
+
+If the page contains no questions (pure theory/explanation only), return:
+{"questions": []}
+
+Be exhaustive. Missing a question on this page is the worst possible failure.

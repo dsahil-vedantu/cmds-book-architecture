@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg
+
+# Node
+node_modules/
+dist/
+.vite/
+*.log
+
+# Env (any .env variant — local-prod, .env.foo, etc. — keep secrets out)
+.env
+.env.*
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Docker volumes (local dev)
+pgdata/
+redisdata/
+miniodata/
+
+# Artifacts
+*.pdf
+!backend/tests/fixtures/**/*.pdf
+
+# SQLite dev databases (live user data, never commit)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+# DB backup snapshots (e.g. cmds.db.bak_qlatex) — large, never commit
+*.bak_*
+cmds.db.bak*
+
+# Local storage (uploaded PDFs, artifacts)
+backend/storage/
+backend/logs/
+backend/uploads/
+
+# Claude Code internal cache/backups (not project code)
+.claude/
+*.xlsx
+
+# Dev-only sample generators — not part of the prod export pipeline
+backend/sample_export_format_a.py
+backend/sample_export_theory.py
+
+# resvg standalone binary — Windows-dev SVG->PNG fallback (prod uses cairosvg).
+# Download per backend/tools/resvg/README.md; not committed (platform-specific binary).
+backend/tools/resvg/

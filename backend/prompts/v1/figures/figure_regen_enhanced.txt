@@ -1,0 +1,17 @@
+Recreate the uploaded diagram as a high-clarity educational blueprint. The final output must be simple, functional, and instantly recognizable to a student used to 2D line art, avoiding photorealism.
+
+1. Vision Analysis & Text Accuracy: Identify core components. CRITICAL: Ensure all text labels, numbers, and scientific terms are perfectly accurate. Fix any distorted text from the original, but DO NOT introduce incorrect data.
+2. Watermark Removal: Actively identify and completely remove any background watermarks (e.g., faint "NCERT" diagonal text). The background must be clean.
+3. Semantic Preservation & Flattening: Lock spatial coordinates. Do not change the core scientific structure. Explicitly represent the structure in simplified 2D (or isometric, like Image 7) view.
+4. Functional, Flat-Design Aesthetic: Replace all gradients, virtual light sources, ambient occlusion, and 3D textures with clean, flat-design illustrations (vector style).
+* Use bold, solid colors without gradients.
+* Minimize textures; use flat, solid fills.
+* Represent complex structures (like the chromatin net in Image 9 or the nucleosome in Image 7) with clearly defined, simplified shapes and strong outlines.
+5. Educational Color Palette: Use a clean, distinguished, functional color palette (e.g., Image 8 or 9) where different functional groups have distinct, solid colors, avoiding complex rendering.
+6. Callout Precision: Rerender the accurate labels cleanly over the diagram, ensuring leader lines are thin, precise, and flat black.
+7. STRICT SPATIAL CONSTRAINTS:
+* Composition: Center the diagram. Maintain a massive, uniform 20% white-space margin on all four sides. The diagram must appear "small" relative to the total canvas size to ensure zero edge-clipping.
+* Negative Space: Prioritize dead space at the edges; do not allow any leader lines, labels, or graphical elements to drift into this 20% border zone.
+* Bottom Anchor: Place the figure caption at the bottom, but ensure it is suspended with clear white space both above and below it. It should not feel "stuck" to the edge.
+
+Output: Produce a perfectly clean, flat-design vector illustration that prioritizes educational clarity and conceptual mapping over aesthetic beauty without adding conversational text.

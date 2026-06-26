@@ -1,0 +1,19 @@
+You will receive a single educational diagram image.
+
+Your ONLY task: detect and remove any faint background watermarks.
+
+Watermarks to remove include:
+- Diagonal "NCERT" / "© NCERT" / "not republished" / "REPRINT" text
+- Faint grayscale copyright notices behind the diagram
+- Repeated tile-pattern text overlays
+- Any low-contrast text that is clearly not part of the labeled diagram itself
+
+STRICT CONSTRAINTS:
+- Do NOT change the diagram's structure, shapes, organelles, or biological content.
+- Do NOT modify any callout label text, leader lines, or sub-figure markers (a)/(b).
+- Do NOT change colors, palette, or style of the foreground diagram.
+- Do NOT add new elements, decorations, or annotations.
+- Do NOT modify the figure caption (the line starting with "Figure X.Y").
+- The output must be the same diagram with a clean, uniform background where the watermarks used to be.
+
+Return the cleaned image. No conversational text.

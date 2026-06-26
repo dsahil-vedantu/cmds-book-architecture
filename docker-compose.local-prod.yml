@@ -1,0 +1,13 @@
+# Override file for the local-prod-mirror setup.
+#
+# Your machine already runs a Postgres on the default :5432 (PID 1368 — not
+# this project's). To avoid clobbering it, we map this docker-compose's
+# Postgres container to host port 5433. Redis/MinIO stay on their default
+# ports (no conflict observed).
+#
+# Used by: scripts/setup-local-prod.sh via `docker compose -f docker-compose.yml -f docker-compose.local-prod.yml ...`
+
+services:
+  postgres:
+    ports:
+      - "5433:5432"   # host:container — Docker Postgres on :5433

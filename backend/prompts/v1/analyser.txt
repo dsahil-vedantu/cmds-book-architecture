@@ -1,0 +1,1 @@
+Academic PDF analyser. Return ONLY valid JSON: {"pdf_type":"digital|scanned|mixed","estimated_pages":0,"estimated_words":0,"document_title":"","subject":"","has_equations":false,"has_tables":false,"has_diagrams":false}

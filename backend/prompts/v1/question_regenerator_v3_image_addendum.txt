@@ -1,0 +1,102 @@
+═══════════════════════════════════════════
+ADDENDUM — IMAGE-AWARE REGENERATION
+═══════════════════════════════════════════
+
+The source question has an EMBEDDED IMAGE that the question text references.
+You receive the image as visual input.
+
+YOUR ADDITIONAL TASK: after generating each regenerated question, decide whether the EXISTING image still works for it, or whether a NEW image must be generated.
+
+═══════════════════════════════════════════
+DECISION RULE — image_needs_regen
+═══════════════════════════════════════════
+
+Set ``image_needs_regen = true`` if BOTH conditions hold:
+  (a) The image visually contains SPECIFIC content that the source question
+      references — labeled values, marked coordinates, named axes / points,
+      explicit measurements, identified entities, or any element a student
+      must read off the image to answer
+  (b) The regenerated question changes any of those specific values
+      OR introduces new specifics not present in the image
+
+Set ``image_needs_regen = false`` if EITHER:
+  (a) The image is a GENERIC schematic — no specific numbers / labels /
+      coordinates that the question explicitly references; the image
+      conveys structure or concept rather than specific quantities
+  (b) The regenerated question changes only wording, presentation, or
+      vocabulary — not the specific quantities depicted in the image
+  (c) The regenerated question uses the SAME quantities as the source
+      (e.g. rephrase-style regen)
+
+═══════════════════════════════════════════
+EXAMPLES
+═══════════════════════════════════════════
+
+Example A — TRUE (image must regen)
+  Image: parabola y = 2x² with labeled intersections (1.5, 4.5) and (-1, 2)
+  Source: "Find roots of 2x² - x - 3 = 0 using the graph"
+  Regen (NUMBERS_ONLY): "Find roots of 3x² - 2x - 5 = 0 using the graph"
+  Verdict: TRUE — image labels (1.5, 4.5), (-1, 2) no longer match the new equation's roots
+
+Example B — FALSE (image stays)
+  Image: generic right-triangle diagram (no marked sides)
+  Source: "Find hypotenuse of right triangle with legs 3 and 4"
+  Regen (NUMBERS_ONLY): "Find hypotenuse of right triangle with legs 5 and 12"
+  Verdict: FALSE — image depicts "a right triangle" abstractly; new values don't conflict with anything labeled
+
+Example C — FALSE (image stays)
+  Image: Coolidge tube schematic (component labels: F, M, T, A — no values)
+  Source: "Describe the function of the molybdenum cylinder M in X-ray production"
+  Regen (REPHRASE_SAME_LOGIC): "Explain the role of component M (molybdenum cylinder) in producing X-rays"
+  Verdict: FALSE — wording changes, components unchanged
+
+Example D — TRUE (image must regen)
+  Image: bar chart with bars labeled 12, 18, 24, 30 (representing student counts)
+  Source: "From the chart, the mean number of students is..."
+  Regen (NUMBERS_ONLY): "From the chart, the mean is..." (new values needed)
+  Verdict: TRUE — chart bars labeled with specific values must change
+
+Example E — FALSE (image stays)
+  Image: parabola sketch (no axis values, no intersection labels)
+  Source: "Sketch the parabola y = 2x² + 3x"
+  Regen (NUMBERS_ONLY): "Sketch the parabola y = 4x² - 5x"
+  Verdict: FALSE — original sketch was generic (no specific labels); the new sketch would be visually different but the source image was conceptual, not literal
+
+═══════════════════════════════════════════
+OUTPUT SCHEMA — EXTENDED
+═══════════════════════════════════════════
+
+In your JSON response, EACH regenerated question item gets two additional
+fields beyond the standard regen output:
+
+  "image_needs_regen": <true | false>
+  "image_regen_reason": "<one-sentence rationale, plain English>"
+
+When image_needs_regen = true, ``image_regen_reason`` MUST describe in plain
+English what visual element changed. This text will be passed as the custom
+instruction to the figure-regeneration engine. Be specific.
+
+Good reasons:
+  ✓ "Image labels intersection at (1.5, 4.5); new equation roots are (0.7, 3.4)"
+  ✓ "Bar chart shows specific values 12, 18, 24, 30; new question requires values 8, 14, 20, 26"
+  ✓ "Original image shows triangle with sides labeled 3, 4, 5; regen changes to 5, 12, 13"
+
+Bad reasons (too vague):
+  ✗ "Numbers changed"
+  ✗ "Different problem now"
+  ✗ "Image doesn't match"
+
+When image_needs_regen = false, ``image_regen_reason`` may be empty or
+"Image is generic / values unchanged."
+
+═══════════════════════════════════════════
+SAFETY
+═══════════════════════════════════════════
+
+- LEAN TOWARD FALSE if unsure. False = image stays; user can manually
+  trigger figure regeneration later. True = image regen runs immediately
+  and costs money.
+- A REPHRASE-style regen ALWAYS has image_needs_regen = false (numbers
+  unchanged by definition).
+- A NUMBERS_ONLY regen REQUIRES the image inspection — apply the rule
+  carefully.

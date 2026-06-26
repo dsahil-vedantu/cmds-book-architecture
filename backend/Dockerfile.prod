@@ -1,0 +1,34 @@
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    APP_ENV=production
+
+WORKDIR /app
+
+# pandoc — docx export (pypandoc shells out to it).
+# libcairo2 — runtime system library cairosvg needs to rasterize the Step-2
+#   regenerated LaTeX/SVG diagrams to PNG for embedding in the Word export.
+#   Without it, cairosvg can't load and diagrams fall back to no figure.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    libpq-dev \
+    pandoc \
+    libcairo2 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY pyproject.toml ./
+RUN pip install --upgrade pip setuptools wheel && \
+    pip install -e ".[postgres,queue]"
+
+COPY . .
+
+# Single-container Celery: start.sh launches the Celery worker in the
+# background and uvicorn in the foreground. Both processes share /app
+# (and therefore the Railway volume at /app/storage), so PDFs uploaded
+# via the API are visible to the worker that extracts them.
+RUN chmod +x /app/start.sh
+CMD ["/app/start.sh"]
